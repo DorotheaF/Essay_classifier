@@ -1,14 +1,32 @@
 import numpy as np
 import pandas as pd
 import sklearn.naive_bayes
+import sklearn.linear_model
 import sklearn.metrics
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import StratifiedKFold
-
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.linear_model import SGDClassifier
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline
+from xgboost import XGBClassifier
 
 def fit_model(X_train, y_train, X_test, y_test):
+    params = {
+        'objective': 'binary:logistic',
+        'max_depth': 4,
+        'alpha': 10,
+        'learning_rate': 1.0,
+        'n_estimators': 100
+    }
 
-    classifier = sklearn.naive_bayes.GaussianNB()
+    # classifier = XGBClassifier(**params)
+    # classifier = make_pipeline(StandardScaler(), SGDClassifier(max_iter=1000, tol=1e-3))
+    # classifier = GradientBoostingClassifier(n_estimators=100, learning_rate=0.8, max_depth=1, random_state=0)
+    # classifier = RandomForestClassifier(max_depth=5, random_state=0)
+    # classifier = sklearn.linear_model.LogisticRegression(multi_class='multinomial', random_state=0, max_iter=3000)
+    # classifier = sklearn.naive_bayes.GaussianNB()
+
     classifier.fit(X_train, y_train)
 
     y_pred = classifier.predict(X_test)
@@ -19,11 +37,10 @@ def fit_model(X_train, y_train, X_test, y_test):
 
 def run_models(features, num_folds):
     dataframe = pd.read_excel('data/TOEFL Annotation_1.xlsx')
-    dataframe['level'] = dataframe['level'].replace('low', '0').replace('medium', '1').replace('high', '2')
-    dataframe = dataframe.sample(frac=1, random_state=3)
+    dataframe['level'] = dataframe['level'].replace('low', 0).replace('medium', 1).replace('high', 2)
     X = dataframe[features]
     y = dataframe['level']
-    folds = StratifiedKFold(num_folds, shuffle=True)
+    folds = StratifiedKFold(num_folds, shuffle=True, random_state=0)
 
     model_predictions = {}
 
@@ -48,7 +65,7 @@ def run_models(features, num_folds):
 #        'textstat difficult words', 'arc_length', 'average_height', 'height',
 #        'num_edus']
 
-features = ['count', 'cont', 'retain', 'shift', 'one_mention', 'multi_mention', 'difficult words']
+features = ['count', 'cont', 'retain', 'shift', 'one_mention', 'multi_mention', 'flesch_reading_ease']
 num_folds = 5
 
 run_models(features, num_folds)
