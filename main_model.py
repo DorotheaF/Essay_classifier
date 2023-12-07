@@ -12,15 +12,8 @@ from sklearn.pipeline import make_pipeline
 from xgboost import XGBClassifier
 
 def fit_model(X_train, y_train, X_test, y_test):
-    params = {
-        'objective': 'binary:logistic',
-        'max_depth': 4,
-        'alpha': 10,
-        'learning_rate': 1.0,
-        'n_estimators': 100
-    }
 
-    # classifier = XGBClassifier(**params)
+    # classifier = XGBClassifier(objective='multi:softmax', max_depth=4, learning_rate=.8, n_estimators=100)
     # classifier = make_pipeline(StandardScaler(), SGDClassifier(max_iter=1000, tol=1e-3))
     # classifier = GradientBoostingClassifier(n_estimators=100, learning_rate=0.8, max_depth=1, random_state=0)
     # classifier = RandomForestClassifier(max_depth=5, random_state=0)
