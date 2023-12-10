@@ -18,7 +18,7 @@ def fit_model(X_train, y_train, X_test, y_test):
     # classifier = GradientBoostingClassifier(n_estimators=100, learning_rate=0.8, max_depth=1, random_state=0)
     # classifier = RandomForestClassifier(max_depth=5, random_state=0)
     # classifier = sklearn.linear_model.LogisticRegression(multi_class='multinomial', random_state=0, max_iter=3000)
-    # classifier = sklearn.naive_bayes.GaussianNB()
+    classifier = sklearn.naive_bayes.GaussianNB()
 
     classifier.fit(X_train, y_train)
 
@@ -33,6 +33,7 @@ def run_models(features, num_folds):
     dataframe['level'] = dataframe['level'].replace('low', 0).replace('medium', 1).replace('high', 2)
     X = dataframe[features]
     y = dataframe['level']
+    print(len(X), len(y))
     folds = StratifiedKFold(num_folds, shuffle=True, random_state=0)
 
     model_predictions = {}
@@ -45,7 +46,8 @@ def run_models(features, num_folds):
 
     for i in range(1, num_folds):
         total_matrix += model_predictions[i]
-
+    print(model_predictions)
+    print(total_matrix)
     accuracy = (total_matrix[0][0] + total_matrix[1][1] + total_matrix[2][2]) / 79
     print(features)
     print(accuracy)
