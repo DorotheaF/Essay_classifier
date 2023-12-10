@@ -34,10 +34,11 @@ def run_models(num_folds, experiment = "ITA_ITA"):
     data = get_data()
     dataframe = data[0].copy()
     dataframe['level'] = dataframe['level'].replace('low', 0).replace('medium', 1).replace('high', 2)
-    # print(dataframe.columns.to_list())
-    X = dataframe[[col for col in dataframe.columns.to_list() if col != 'level']]
+    rst = ["name", "arc_length","average_height","height","num_edus","num_rel","prop_rel", "level"]
+    rm_ft = ['name', "level"]
+    X = dataframe[[col for col in dataframe.columns.to_list() if col not in rm_ft]]
     y = dataframe['level']
-
+    print(X.columns.to_list())
     folds = StratifiedKFold(num_folds, shuffle=True, random_state=0)
 
     model_predictions = {}
@@ -75,9 +76,12 @@ def run_models_different_lang():
     dataframe, val = data[0].copy(), data[1].copy()
     dataframe['level'] = dataframe['level'].replace('low', 0).replace('medium', 1).replace('high', 2)
     val['level'] = val['level'].replace('low', 0).replace('medium', 1).replace('high', 2)
-    X = dataframe[[col for col in dataframe.columns.to_list() if col != 'level']]
+    rst = ["name", "arc_length","average_height","height","num_edus","num_rel","prop_rel", "level"]
+    rm_ft = ["name", "level"]
+    
+    X = dataframe[[col for col in dataframe.columns.to_list() if col not in rm_ft]]
     y = dataframe['level']
-    X_test = val[[col for col in val.columns.to_list() if col != 'level']]
+    X_test = val[[col for col in val.columns.to_list() if col not in rm_ft]]
     y_test = val['level']
 
     total_matrix = fit_model(X, y, X_test, y_test)
@@ -124,7 +128,7 @@ def get_data():
     drop_file_ids = [95152, 250580, 1020096]
     diff_ids = get_lang_files('ITA')
     df = pd.read_excel("./data/TOEFL Annotation_mine.xlsx")
-    df = df.drop(columns=['text_standard', 'essay'])
+    df = df.drop(columns=['text_standard', 'essay', 'ID'])
     df = df[~df['name'].isin(drop_file_ids)]
     # df = df[df['name'].isin(diff_ids)]
     # # print(df[features])
