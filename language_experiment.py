@@ -18,9 +18,9 @@ def fit_model(X_train, y_train, X_test, y_test):
     # classifier = XGBClassifier(objective='multi:softmax', max_depth=4, learning_rate=.8, n_estimators=100)
     # classifier = make_pipeline(StandardScaler(), SGDClassifier(max_iter=1000, tol=1e-3))
     # classifier = GradientBoostingClassifier(n_estimators=100, learning_rate=0.8, max_depth=1, random_state=0)
-    classifier = RandomForestClassifier(max_depth=5, random_state=0)
+    # classifier = RandomForestClassifier(max_depth=5, random_state=0)
     # classifier = sklearn.linear_model.LogisticRegression(multi_class='multinomial', random_state=0, max_iter=3000)
-    # classifier = sklearn.naive_bayes.GaussianNB()
+    classifier = sklearn.naive_bayes.GaussianNB()
 
     classifier.fit(X_train, y_train)
 
@@ -68,7 +68,7 @@ def run_models(num_folds, experiment = "ITA_ITA"):
     print(total_matrix)
 
     res = {"accuracy": accuracy, "cf": total_matrix.tolist()}
-    with open(f"./results/{experiment}.json", "w") as f:
+    with open(f"./results/{experiment}_NB.json", "w") as f:
         json.dump(res, f)
 
 def run_models_different_lang():
@@ -100,7 +100,7 @@ def run_models_different_lang():
     print(total_matrix)
 
     res = {"accuracy": accuracy, "cf": total_matrix.tolist()}
-    with open(f"./results/ITA_OTHERS.json", "w") as f:
+    with open(f"./results/ITA_OTHERS_NB.json", "w") as f:
         json.dump(res, f)
 
 
@@ -128,7 +128,7 @@ def get_data():
     drop_file_ids = [95152, 250580, 1020096]
     diff_ids = get_lang_files('ITA')
     df = pd.read_excel("./data/TOEFL Annotation_mine.xlsx")
-    df = df.drop(columns=['text_standard', 'essay', 'ID'])
+    df = df.drop(columns=['ID'])
     df = df[~df['name'].isin(drop_file_ids)]
     # df = df[df['name'].isin(diff_ids)]
     # # print(df[features])

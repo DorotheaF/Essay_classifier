@@ -2,7 +2,7 @@ import pandas as pd
 
 dataframe = pd.read_excel('data/TOEFL Annotation.xlsx')
 
-added_auto = pd.read_excel('data/Word Difficulty.xlsx')
+added_auto = pd.read_excel('data/word_difficulty_final.xlsx')
 
 added_rst = pd.read_excel('data/rst_features.xlsx')
 
